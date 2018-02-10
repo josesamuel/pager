@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Pager/Pager.iml" filepath="$PROJECT_DIR$/Pager/Pager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Pager-Parent.iml" filepath="$PROJECT_DIR$/Pager-Parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PagerTestClient/PagerTestClient.iml" filepath="$PROJECT_DIR$/PagerTestClient/PagerTestClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PagerTestService/PagerTestService.iml" filepath="$PROJECT_DIR$/PagerTestService/PagerTestService.iml" />
+    </modules>
+  </component>
+</project>

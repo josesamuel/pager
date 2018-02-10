@@ -1,0 +1,3 @@
+include ':Pager', ':PagerTestService', ':PagerTestClient'
+
+rootProject.name = "Pager-Parent"

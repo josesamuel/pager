@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+
+    api 'com.android.support:support-annotations:27.0.2'
+
+    api 'com.josesamuel:parceler-api:1.0.0'
+    annotationProcessor 'com.josesamuel:parceler:1.0.0'
+    api 'com.josesamuel:remoter-annotations:1.1.5'
+    annotationProcessor 'com.josesamuel:remoter:1.1.5'
+
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
