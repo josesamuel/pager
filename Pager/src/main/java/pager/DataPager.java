@@ -52,6 +52,20 @@ public final class DataPager<T> implements Iterable<T> {
             }
 
             @Override
+            public void notifyDataAdded(T newData, int index) {
+                if (listener != null) {
+                    listener.onDataAdded(newData, index);
+                }
+            }
+
+            @Override
+            public void notifyDataRemoved(int index) {
+                if (listener != null) {
+                    listener.onDataRemoved(index);
+                }
+            }
+
+            @Override
             public void notifyDataSetChanged() {
                 if (listener != null) {
                     listener.onDataSetChanged();
@@ -131,7 +145,16 @@ public final class DataPager<T> implements Iterable<T> {
     }
 
     /**
-     * @hide internal method
+     * Close the data source, performs any cleanup as needed
+     */
+    public void close() {
+        dataProvider.close();
+    }
+
+    /**
+     * internal method
+     *
+     * @hide
      */
     @ParcelProperty("dataPagerNotifier")
     void setDataPagerNotifier(DataPagerNotifier<T> dataPagerNotifier) {
@@ -146,6 +169,22 @@ public final class DataPager<T> implements Iterable<T> {
             }
 
             @Override
+            public void onDataAdded(T newData, int index) {
+                pagedDataProvider.onDataAdded(newData, index);
+                if (dataPagerListener != null) {
+                    dataPagerListener.onDataAdded(newData, index);
+                }
+            }
+
+            @Override
+            public void onDataRemoved(int index) {
+                pagedDataProvider.onDataRemoved(index);
+                if (dataPagerListener != null) {
+                    dataPagerListener.onDataRemoved(index);
+                }
+            }
+
+            @Override
             public void onDataSetChanged() {
                 pagedDataProvider.onDataSetChanged();
                 if (dataPagerListener != null) {
@@ -156,7 +195,9 @@ public final class DataPager<T> implements Iterable<T> {
     }
 
     /**
-     * @hide Internal method
+     * Internal method
+     *
+     * @hide
      */
     @ParcelProperty("dataProvider")
     DataProvider<T> getDataProvider() {

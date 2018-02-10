@@ -19,6 +19,22 @@ public interface DataPagerListener<T> {
     void onDataReplaced(@ParamIn T oldData, @ParamIn T newData);
 
     /**
+     * Notify that a data is added
+     *
+     * @param newData New data added
+     * @param index   Index where added
+     */
+    void onDataAdded(@ParamIn T newData, int index);
+
+    /**
+     * Notify that a data is removed
+     *
+     * @param index Index where removed
+     */
+    void onDataRemoved(int index);
+
+
+    /**
      * Called when the data set changed, like size changes
      */
     void onDataSetChanged();

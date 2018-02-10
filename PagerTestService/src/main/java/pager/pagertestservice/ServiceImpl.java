@@ -45,6 +45,11 @@ public class ServiceImpl implements ITestService {
                 Log.v(TAG, "get size " + dataUpdated);
                 return dataUpdated ? 105 : 100;
             }
+
+            @Override
+            public void close() {
+
+            }
         };
         dataPager = new DataPager<>(dataProvider);
         return dataPager;

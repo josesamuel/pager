@@ -101,5 +101,33 @@ internal class DataPagerProvider<T>(private val dataProvider: DataProvider<T>) :
         pagedData.clear()
     }
 
+    @Synchronized
+    override fun onDataAdded(newData: T, index: Int) {
+        dataSize = dataProvider.size()
+        if (index < currentStart) {
+            currentStart++
+            currentEnd++
+        } else if (index in currentStart..currentEnd) {
+            pagedData.add(index - currentStart, newData)
+            pagedData.removeAt(pagedData.size - 1)
+        }
+    }
+
+    @Synchronized
+    override fun onDataRemoved(index: Int) {
+        dataSize = dataProvider.size()
+        if (index < currentStart) {
+            currentStart--
+            currentEnd--
+        } else if (index in currentStart..currentEnd) {
+            pagedData.removeAt(index - currentStart)
+            currentEnd--
+            if (currentEnd < currentStart) {
+                currentStart = -1
+                currentEnd = -1
+            }
+        }
+    }
+
 
 }

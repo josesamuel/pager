@@ -5,6 +5,9 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DataPagerTest {
 
@@ -24,6 +27,11 @@ public class DataPagerTest {
             @Override
             public int size() {
                 return 100;
+            }
+
+            @Override
+            public void close() {
+
             }
         };
 
@@ -73,6 +81,11 @@ public class DataPagerTest {
             public int size() {
                 return expectUpdate ? 105 : 100;
             }
+
+            @Override
+            public void close() {
+
+            }
         };
 
         DataPager<TestData> pagedList = new DataPager<>(dataProvider);
@@ -81,6 +94,14 @@ public class DataPagerTest {
             public void onDataReplaced(TestData oldData, TestData newData) {
                 System.out.println("NotifyReplaced " + oldData.intData + " " + newData.intData);
                 Assert.assertTrue(expectReplace);
+            }
+
+            @Override
+            public void onDataAdded(TestData newData, int index) {
+            }
+
+            @Override
+            public void onDataRemoved(int index) {
             }
 
             @Override
@@ -154,6 +175,11 @@ public class DataPagerTest {
             public int size() {
                 return 100;
             }
+
+            @Override
+            public void close() {
+
+            }
         };
 
         DataPager<Integer> pagedList = new DataPager<>(dataProvider);
@@ -167,4 +193,125 @@ public class DataPagerTest {
         Assert.assertEquals(100, index);
 
     }
+
+    @Test
+    public void testAdd() {
+        final List<Integer> data = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            data.add(i);
+        }
+
+        DataProvider<Integer> dataProvider = new DataProvider<Integer>() {
+            @Override
+            public Integer get(int position) throws IndexOutOfBoundsException {
+                return data.get(position);
+            }
+
+            @Override
+            public int size() {
+                return data.size();
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+
+        DataPager<Integer> pagedList = new DataPager<>(dataProvider);
+
+        int index = 0;
+        for (int readData : pagedList) {
+            Assert.assertEquals(index, readData);
+            index++;
+        }
+
+        Assert.assertEquals(100, index);
+
+        //add data
+        for (int i = 50; i < 60; i++) {
+            data.add(i, i);
+            pagedList.getDataPagerNotifier().notifyDataAdded(i, i);
+        }
+
+        //add data
+        for (int i = 0; i < 5; i++) {
+            data.add(i, i);
+            pagedList.getDataPagerNotifier().notifyDataAdded(i, i);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            int addIndex = data.size();
+            data.add(addIndex, i);
+            pagedList.getDataPagerNotifier().notifyDataAdded(addIndex, i);
+        }
+
+
+        Assert.assertEquals(data.size(), pagedList.size());
+
+        for (int i = 0; i < data.size(); i++) {
+            Assert.assertEquals(data.get(i), pagedList.get(i));
+        }
+
+    }
+
+    @Test
+    public void testRemove() {
+        final List<Integer> data = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            data.add(i);
+        }
+
+        DataProvider<Integer> dataProvider = new DataProvider<Integer>() {
+            @Override
+            public Integer get(int position) throws IndexOutOfBoundsException {
+                return data.get(position);
+            }
+
+            @Override
+            public int size() {
+                return data.size();
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+
+        DataPager<Integer> pagedList = new DataPager<>(dataProvider);
+
+        int index = 0;
+        for (int readData : pagedList) {
+            Assert.assertEquals(index, readData);
+            index++;
+        }
+
+        Assert.assertEquals(100, index);
+
+        //add data
+        for (int i = 50; i < 60; i++) {
+            data.remove(i);
+            pagedList.getDataPagerNotifier().notifyDataRemoved(i);
+        }
+
+        //add data
+        for (int i = 0; i < 5; i++) {
+            data.remove(0);
+            pagedList.getDataPagerNotifier().notifyDataRemoved(0);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            int removeIndex = data.size() - 1;
+            data.remove(removeIndex);
+            pagedList.getDataPagerNotifier().notifyDataRemoved(removeIndex);
+        }
+
+
+        Assert.assertEquals(data.size(), pagedList.size());
+
+        for (int i = 0; i < data.size(); i++) {
+            Assert.assertEquals(data.get(i), pagedList.get(i));
+        }
+
+    }
+
 }

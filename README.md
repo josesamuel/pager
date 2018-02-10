@@ -1,6 +1,6 @@
 # Pager
 
-Pager  - An alternative to Cursor, providing paged access to a collection of data across process.
+Pager  - An alternative to Cursor, providing paged access to a collection of data, which can be shared across a process.
 
 
 ## Why Pager
@@ -9,16 +9,50 @@ Pager  - An alternative to Cursor, providing paged access to a collection of dat
 * Unlike Cursor which represents a database row and only allows primitive access to each columns, Pager allows you to pass the actual object.
 
 ```java
+
+//----------------------------------
+//Using Cursor will be something like this
+
+Cursor cursor = getCursor();
+
+//Traverse each row
+if (cursor.moveToFirst()) {
+	do{
+		//primitive access to each coloumn 
+		String name = cursor.getString(firstColumn);
+		int age = cursor.getInt(secondColumn);
+		
+		//create your object from each column read
+		Employee employee = new Employee(name, age)
+		
+		//do something with employee
+	} while (cursor.moveToNext())
+}
+
+//----------------------------------
+
+//Using Pager
+
+DataPager<Employee> employees = getDataPager(); //AIDL or Remoter service call
+for(Employee employee: employees){
+	//do something with employee
+}
+
+```
+
+* Pager allows you to notify the clients that a given data is replaced with another data. The change gets automatically refreshed at client. 
+* Add or remove data at the source, or change the whole data source, which gets automatically refreshed at client.
+	* No need of ContentObserver or requery. 
+	* The original DataPager automatically reflect the updated data
+* Pass DataPager across process using [Remoter](http://j.mp/Remoter)
+
+```java
 @Remoter
 public interface ISampleService {
     DataPager<MyData> getMyDatas();
 }
 
 ```
-
-* Pager allows you to notify the clients that a given data is replaced with another data. The change gets automatically refreshed at client.
-* Pager allows you to even change the size of the data set which is seamlessly refreshed at client.
-* Pass DataPager across process through AIDL or [Remoter](http://j.mp/Remoter)
 
 
 
@@ -30,7 +64,7 @@ Gradle dependency
 ```groovy
 dependencies {
 	//Replace "api" with "compile" for pre AndroidStudio 3
-    api 'com.josesamuel:pager:1.0.0'
+    api 'com.josesamuel:pager:1.0.1'
 }
 ```
 

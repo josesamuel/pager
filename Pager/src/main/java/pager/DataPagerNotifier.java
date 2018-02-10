@@ -20,6 +20,22 @@ public interface DataPagerNotifier<T> {
     void notifyDataReplaced(@ParamIn T oldData, @ParamIn T newData);
 
     /**
+     * Notify that a data is added
+     *
+     * @param newData New data added
+     * @param index   Index where added
+     */
+    void notifyDataAdded(@ParamIn T newData, int index);
+
+    /**
+     * Notify that a data is removed
+     *
+     * @param index Index where removed
+     */
+    void notifyDataRemoved(int index);
+
+
+    /**
      * Notify that the data set has changed and needs to be re-fetched
      */
     void notifyDataSetChanged();

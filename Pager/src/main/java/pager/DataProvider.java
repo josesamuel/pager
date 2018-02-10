@@ -23,4 +23,9 @@ public interface DataProvider<T> {
      */
     int size();
 
+    /**
+     * Close the provider and do any cleanup
+     */
+    void close();
+
 }
