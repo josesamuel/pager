@@ -33,7 +33,7 @@ if (cursor.moveToFirst()) {
 
 //Using Pager
 
-DataPager<Employee> employees = getDataPager(); //AIDL or Remoter service call
+Pager<Employee> employees = getEmployeePager(); //Local or Remoter service call
 for(Employee employee: employees){
 	//do something with employee
 }
@@ -43,13 +43,13 @@ for(Employee employee: employees){
 * Pager allows you to notify the clients that a given data is replaced with another data. The change gets automatically refreshed at client. 
 * Add or remove data at the source, or change the whole data source, which gets automatically refreshed at client.
 	* No need of ContentObserver or requery. 
-	* The original DataPager automatically reflect the updated data
-* Pass DataPager across process using [Remoter](http://j.mp/Remoter)
+	* The original Pager automatically reflect the updated data
+* Pass Pager across process using [Remoter](http://j.mp/Remoter)
 
 ```java
 @Remoter
 public interface ISampleService {
-    DataPager<MyData> getMyDatas();
+    Pager<Employee> getEmployeePager();
 }
 
 ```
@@ -64,7 +64,7 @@ Gradle dependency
 ```groovy
 dependencies {
 	//Replace "api" with "compile" for pre AndroidStudio 3
-    api 'com.josesamuel:pager:1.0.1'
+    api 'com.josesamuel:pager:1.0.2'
 }
 ```
 

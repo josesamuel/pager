@@ -4,11 +4,11 @@ package pager;
 import remoter.annotations.Remoter;
 
 /**
- * Provides the actual data to {@link DataPager}
+ * Provides the actual data to {@link Pager}
  *
  * @param <T> Any primitive type, or Parcelable, or a class annotated as @Parcel
- * @see DataPager
- * @see DataPagerNotifier
+ * @see Pager
+ * @see PagerNotifier
  */
 @Remoter
 public interface DataProvider<T> {

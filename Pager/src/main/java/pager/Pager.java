@@ -23,26 +23,26 @@ import remoter.RemoterProxy;
  * @author js
  */
 @Parcel
-public final class DataPager<T> implements Iterable<T> {
+public final class Pager<T> implements Iterable<T> {
 
     private DataProvider<T> dataProvider;
-    private DataPagerNotifier<T> dataPagerNotifier;
+    private PagerNotifier<T> pagerNotifier;
     @Transient
-    private DataPagerProvider<T> pagedDataProvider;
+    private PagerProvider<T> pagedDataProvider;
     @Transient
-    private DataPagerListener<T> dataPagerListener;
+    private PagerListener<T> pagerListener;
 
     /**
-     * Creates an instance of {@link DataPager}
+     * Creates an instance of {@link Pager}
      *
      * @param dataProvider The {@link DataProvider} that provides the actual data.
      */
     @ParcelConstructor
-    public DataPager(@NonNull @ParcelProperty("dataProvider") DataProvider<T> dataProvider) {
+    public Pager(@NonNull @ParcelProperty("dataProvider") DataProvider<T> dataProvider) {
         this.dataProvider = dataProvider;
-        this.pagedDataProvider = new DataPagerProvider<>(dataProvider);
-        setDataPagerNotifier(new DataPagerNotifier<T>() {
-            DataPagerListener<T> listener;
+        this.pagedDataProvider = new PagerProvider<>(dataProvider);
+        setPagerNotifier(new PagerNotifier<T>() {
+            PagerListener<T> listener;
 
             @Override
             public void notifyDataReplaced(T oldData, T newData) {
@@ -73,7 +73,7 @@ public final class DataPager<T> implements Iterable<T> {
             }
 
             @Override
-            public void registerListener(DataPagerListener<T> listener) {
+            public void registerListener(PagerListener<T> listener) {
                 this.listener = listener;
             }
         });
@@ -124,24 +124,24 @@ public final class DataPager<T> implements Iterable<T> {
     }
 
     /**
-     * Sets a {@link DataPagerListener} to listen for data replacements or data updates
+     * Sets a {@link PagerListener} to listen for data replacements or data updates
      */
-    public void setDataPagerListener(DataPagerListener<T> dataPagerListener) {
-        this.dataPagerListener = dataPagerListener;
+    public void setPagerListener(PagerListener<T> pagerListener) {
+        this.pagerListener = pagerListener;
     }
 
     /**
-     * Returns the {@link DataPagerNotifier} which can be used to replace a data or update the whole data.
+     * Returns the {@link PagerNotifier} which can be used to replace a data or update the whole data.
      * <p>
-     * Applicable only at the process that created this {@link DataPager} instance.
+     * Applicable only at the process that created this {@link Pager} instance.
      * May return null at the client side
      */
-    @ParcelProperty("dataPagerNotifier")
-    public DataPagerNotifier<T> getDataPagerNotifier() {
+    @ParcelProperty("pagerNotifier")
+    public PagerNotifier<T> getPagerNotifier() {
         if (dataProvider instanceof RemoterProxy) {
             return null;
         }
-        return dataPagerNotifier;
+        return pagerNotifier;
     }
 
     /**
@@ -156,39 +156,39 @@ public final class DataPager<T> implements Iterable<T> {
      *
      * @hide
      */
-    @ParcelProperty("dataPagerNotifier")
-    void setDataPagerNotifier(DataPagerNotifier<T> dataPagerNotifier) {
-        this.dataPagerNotifier = dataPagerNotifier;
-        dataPagerNotifier.registerListener(new DataPagerListener<T>() {
+    @ParcelProperty("pagerNotifier")
+    void setPagerNotifier(PagerNotifier<T> pagerNotifier) {
+        this.pagerNotifier = pagerNotifier;
+        pagerNotifier.registerListener(new PagerListener<T>() {
             @Override
             public void onDataReplaced(T oldData, T newData) {
                 pagedDataProvider.onDataReplaced(oldData, newData);
-                if (dataPagerListener != null) {
-                    dataPagerListener.onDataReplaced(oldData, newData);
+                if (pagerListener != null) {
+                    pagerListener.onDataReplaced(oldData, newData);
                 }
             }
 
             @Override
             public void onDataAdded(T newData, int index) {
                 pagedDataProvider.onDataAdded(newData, index);
-                if (dataPagerListener != null) {
-                    dataPagerListener.onDataAdded(newData, index);
+                if (pagerListener != null) {
+                    pagerListener.onDataAdded(newData, index);
                 }
             }
 
             @Override
             public void onDataRemoved(int index) {
                 pagedDataProvider.onDataRemoved(index);
-                if (dataPagerListener != null) {
-                    dataPagerListener.onDataRemoved(index);
+                if (pagerListener != null) {
+                    pagerListener.onDataRemoved(index);
                 }
             }
 
             @Override
             public void onDataSetChanged() {
                 pagedDataProvider.onDataSetChanged();
-                if (dataPagerListener != null) {
-                    dataPagerListener.onDataSetChanged();
+                if (pagerListener != null) {
+                    pagerListener.onDataSetChanged();
                 }
             }
         });

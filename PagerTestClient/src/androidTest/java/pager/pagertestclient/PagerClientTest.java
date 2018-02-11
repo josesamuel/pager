@@ -15,14 +15,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import pager.DataPager;
-import pager.DataPagerListener;
+import pager.Pager;
+import pager.PagerListener;
 import pager.ITestService;
 import pager.ITestService_Proxy;
 import pager.TestData;
 
 /**
- * Test {@link DataPager} received from another service.
+ * Test {@link Pager} received from another service.
  */
 @RunWith(AndroidJUnit4.class)
 public class PagerClientTest {
@@ -65,12 +65,22 @@ public class PagerClientTest {
 
     @Test
     public void testDataPager() throws Exception {
-        DataPager<TestData> pagedList = testService.getDataPager();
-        pagedList.setDataPagerListener(new DataPagerListener<TestData>() {
+        Pager<TestData> pagedList = testService.getTestDataPager();
+        pagedList.setPagerListener(new PagerListener<TestData>() {
             @Override
             public void onDataReplaced(TestData oldData, TestData newData) {
                 System.out.println("NotifyReplaced " + oldData.intData + " " + newData.intData);
                 Assert.assertTrue(expectReplace);
+            }
+
+            @Override
+            public void onDataAdded(TestData newData, int index) {
+
+            }
+
+            @Override
+            public void onDataRemoved(int index) {
+
             }
 
             @Override
@@ -118,7 +128,7 @@ public class PagerClientTest {
     @Test
     public void testPagerIterate() {
 
-        DataPager<TestData> pagedList = testService.getDataPager();
+        Pager<TestData> pagedList = testService.getTestDataPager();
 
         int index = 0;
         for (TestData data : pagedList) {
@@ -128,6 +138,6 @@ public class PagerClientTest {
 
         Assert.assertEquals(100, index);
 
-        Assert.assertNull(pagedList.getDataPagerNotifier());
+        Assert.assertNull(pagedList.getPagerNotifier());
     }
 }

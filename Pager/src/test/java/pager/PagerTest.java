@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DataPagerTest {
+public class PagerTest {
 
     private boolean expectPagedFill;
     private boolean expectReplace;
@@ -35,7 +35,7 @@ public class DataPagerTest {
             }
         };
 
-        DataPager<Integer> pagedList = new DataPager<>(dataProvider);
+        Pager<Integer> pagedList = new Pager<>(dataProvider);
 
         Assert.assertEquals(100, pagedList.size());
 
@@ -88,8 +88,8 @@ public class DataPagerTest {
             }
         };
 
-        DataPager<TestData> pagedList = new DataPager<>(dataProvider);
-        pagedList.setDataPagerListener(new DataPagerListener<TestData>() {
+        Pager<TestData> pagedList = new Pager<>(dataProvider);
+        pagedList.setPagerListener(new PagerListener<TestData>() {
             @Override
             public void onDataReplaced(TestData oldData, TestData newData) {
                 System.out.println("NotifyReplaced " + oldData.intData + " " + newData.intData);
@@ -129,7 +129,7 @@ public class DataPagerTest {
         testDataReplace.intData = 500;
         expectReplace = true;
 
-        pagedList.getDataPagerNotifier().notifyDataReplaced(data, testDataReplace);
+        pagedList.getPagerNotifier().notifyDataReplaced(data, testDataReplace);
 
         //replace 0
         data.id = 0;
@@ -137,7 +137,7 @@ public class DataPagerTest {
         testDataReplace.id = 0;
 
 
-        pagedList.getDataPagerNotifier().notifyDataReplaced(data, testDataReplace);
+        pagedList.getPagerNotifier().notifyDataReplaced(data, testDataReplace);
 
         data = pagedList.get(50);
         System.out.println("Replaced : " + data.intData);
@@ -148,7 +148,7 @@ public class DataPagerTest {
         Assert.assertEquals(500, data.intData);
 
         expectUpdate = true;
-        pagedList.getDataPagerNotifier().notifyDataSetChanged();
+        pagedList.getPagerNotifier().notifyDataSetChanged();
 
         Assert.assertEquals(105, pagedList.size());
         for (int i = 104; i >= 0; i--) {
@@ -182,7 +182,7 @@ public class DataPagerTest {
             }
         };
 
-        DataPager<Integer> pagedList = new DataPager<>(dataProvider);
+        Pager<Integer> pagedList = new Pager<>(dataProvider);
 
         int index = 0;
         for (int data : pagedList) {
@@ -217,7 +217,7 @@ public class DataPagerTest {
             }
         };
 
-        DataPager<Integer> pagedList = new DataPager<>(dataProvider);
+        Pager<Integer> pagedList = new Pager<>(dataProvider);
 
         int index = 0;
         for (int readData : pagedList) {
@@ -230,19 +230,19 @@ public class DataPagerTest {
         //add data
         for (int i = 50; i < 60; i++) {
             data.add(i, i);
-            pagedList.getDataPagerNotifier().notifyDataAdded(i, i);
+            pagedList.getPagerNotifier().notifyDataAdded(i, i);
         }
 
         //add data
         for (int i = 0; i < 5; i++) {
             data.add(i, i);
-            pagedList.getDataPagerNotifier().notifyDataAdded(i, i);
+            pagedList.getPagerNotifier().notifyDataAdded(i, i);
         }
 
         for (int i = 0; i < 5; i++) {
             int addIndex = data.size();
             data.add(addIndex, i);
-            pagedList.getDataPagerNotifier().notifyDataAdded(addIndex, i);
+            pagedList.getPagerNotifier().notifyDataAdded(addIndex, i);
         }
 
 
@@ -277,7 +277,7 @@ public class DataPagerTest {
             }
         };
 
-        DataPager<Integer> pagedList = new DataPager<>(dataProvider);
+        Pager<Integer> pagedList = new Pager<>(dataProvider);
 
         int index = 0;
         for (int readData : pagedList) {
@@ -290,19 +290,19 @@ public class DataPagerTest {
         //add data
         for (int i = 50; i < 60; i++) {
             data.remove(i);
-            pagedList.getDataPagerNotifier().notifyDataRemoved(i);
+            pagedList.getPagerNotifier().notifyDataRemoved(i);
         }
 
         //add data
         for (int i = 0; i < 5; i++) {
             data.remove(0);
-            pagedList.getDataPagerNotifier().notifyDataRemoved(0);
+            pagedList.getPagerNotifier().notifyDataRemoved(0);
         }
 
         for (int i = 0; i < 5; i++) {
             int removeIndex = data.size() - 1;
             data.remove(removeIndex);
-            pagedList.getDataPagerNotifier().notifyDataRemoved(removeIndex);
+            pagedList.getPagerNotifier().notifyDataRemoved(removeIndex);
         }
 
 

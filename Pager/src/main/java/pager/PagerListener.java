@@ -5,10 +5,10 @@ import remoter.annotations.ParamIn;
 import remoter.annotations.Remoter;
 
 /**
- * Listener to register to get notified about changes to the data in a {@link DataPager}
+ * Listener to register to get notified about changes to the data in a {@link Pager}
  */
 @Remoter
-public interface DataPagerListener<T> {
+public interface PagerListener<T> {
 
     /**
      * Called when a data is replaced with another data

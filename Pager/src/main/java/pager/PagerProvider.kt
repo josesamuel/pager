@@ -5,7 +5,7 @@ package pager
  *
  * @author js
  */
-internal class DataPagerProvider<T>(private val dataProvider: DataProvider<T>) : DataPagerListener<T> {
+internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : PagerListener<T> {
 
     var windowSize = 30
     var dataSize = dataProvider.size()

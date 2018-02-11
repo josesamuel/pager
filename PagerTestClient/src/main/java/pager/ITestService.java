@@ -6,7 +6,7 @@ import remoter.annotations.Remoter;
 @Remoter
 public interface ITestService {
 
-    DataPager<TestData> getDataPager();
+    Pager<TestData> getTestDataPager();
 
     void triggerDataReplace();
 

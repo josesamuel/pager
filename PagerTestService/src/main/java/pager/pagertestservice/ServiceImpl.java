@@ -2,24 +2,24 @@ package pager.pagertestservice;
 
 import android.util.Log;
 
-import pager.DataPager;
+import pager.Pager;
 import pager.DataProvider;
 import pager.ITestService;
 import pager.TestData;
 
 /**
- * Sample where {@link DataPager} is returned from one process to another process
+ * Sample where {@link Pager} is returned from one process to another process
  */
 public class ServiceImpl implements ITestService {
 
     private static final String TAG = "ServiceImpl";
     private boolean dataReplaced;
     private volatile boolean dataUpdated;
-    private DataPager<TestData> dataPager;
+    private Pager<TestData> testDataPager;
 
 
     @Override
-    public DataPager<TestData> getDataPager() {
+    public Pager<TestData> getTestDataPager() {
         dataReplaced = false;
         dataUpdated = false;
 
@@ -51,8 +51,8 @@ public class ServiceImpl implements ITestService {
 
             }
         };
-        dataPager = new DataPager<>(dataProvider);
-        return dataPager;
+        testDataPager = new Pager<>(dataProvider);
+        return testDataPager;
     }
 
     /**
@@ -72,14 +72,14 @@ public class ServiceImpl implements ITestService {
         testDataReplace.id = 50;
         testDataReplace.intData = 500;
 
-        dataPager.getDataPagerNotifier().notifyDataReplaced(data, testDataReplace);
+        testDataPager.getPagerNotifier().notifyDataReplaced(data, testDataReplace);
 
         //replace 0
         data.id = 0;
         data.intData = 0;
         testDataReplace.id = 0;
 
-        dataPager.getDataPagerNotifier().notifyDataReplaced(data, testDataReplace);
+        testDataPager.getPagerNotifier().notifyDataReplaced(data, testDataReplace);
 
     }
 
@@ -90,6 +90,6 @@ public class ServiceImpl implements ITestService {
     public void triggerDataUpdate() {
         dataUpdated = true;
         Log.v(TAG, "Notifying data set updated " + dataUpdated);
-        dataPager.getDataPagerNotifier().notifyDataSetChanged();
+        testDataPager.getPagerNotifier().notifyDataSetChanged();
     }
 }

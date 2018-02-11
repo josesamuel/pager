@@ -4,12 +4,12 @@ import remoter.annotations.ParamIn;
 import remoter.annotations.Remoter;
 
 /**
- * Use this to notify the {@link DataPager} clients that a data is replaced or data size changed.
+ * Use this to notify the {@link Pager} clients that a data is replaced or data size changed.
  *
- * @see DataPager#getDataPagerNotifier()
+ * @see Pager#getPagerNotifier()
  */
 @Remoter
-public interface DataPagerNotifier<T> {
+public interface PagerNotifier<T> {
 
     /**
      * Notify that a data is replaced with another data
@@ -43,5 +43,5 @@ public interface DataPagerNotifier<T> {
     /**
      * @hide internal method
      */
-    void registerListener(@ParamIn DataPagerListener<T> listener);
+    void registerListener(@ParamIn PagerListener<T> listener);
 }
