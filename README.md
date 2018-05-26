@@ -64,7 +64,7 @@ Gradle dependency
 ```groovy
 dependencies {
 	//Replace "api" with "compile" for pre AndroidStudio 3
-    api 'com.josesamuel:pager:1.0.2'
+    api 'com.josesamuel:pager:1.0.3'
 }
 ```
 

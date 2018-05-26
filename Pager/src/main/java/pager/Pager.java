@@ -77,6 +77,10 @@ public final class Pager<T> implements Iterable<T> {
                 this.listener = listener;
             }
         });
+
+        if (dataProvider instanceof ListDataProvider) {
+            ((ListDataProvider) dataProvider).setPagerNotifier(getPagerNotifier());
+        }
     }
 
     /**
@@ -98,7 +102,7 @@ public final class Pager<T> implements Iterable<T> {
     }
 
     /**
-     * Sets the paging size
+     * Sets the paging getDataSize
      */
     public void setPageSize(int size) {
         pagedDataProvider.setWindowSize(size);

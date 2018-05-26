@@ -124,6 +124,67 @@ public class PagerClientTest {
         }
     }
 
+    @Test
+    public void testListDataPager() throws Exception {
+        Pager<Integer> pagedList = testService.getListDataPager();
+        pagedList.setPagerListener(new PagerListener<Integer>() {
+            @Override
+            public void onDataReplaced(Integer oldData, Integer newData) {
+                System.out.println("NotifyReplaced " + oldData + " " + newData);
+                Assert.assertTrue(expectReplace);
+            }
+
+            @Override
+            public void onDataAdded(Integer newData, int index) {
+
+            }
+
+            @Override
+            public void onDataRemoved(int index) {
+
+            }
+
+            @Override
+            public void onDataSetChanged() {
+                System.out.println("Test notify onDataSetChanged ");
+                Assert.assertTrue(expectUpdate);
+            }
+        });
+
+        Assert.assertEquals(100, pagedList.size());
+
+        for (int i = 0; i < 100; i++) {
+            Integer data = pagedList.get(i);
+            System.out.println(data);
+            Assert.assertEquals(i, data.intValue());
+        }
+
+        expectReplace = true;
+        testService.triggerListDataReplace();
+
+        Integer data = pagedList.get(50);
+        System.out.println("Replaced : " + data);
+        Assert.assertEquals(500, data.intValue());
+
+        data = pagedList.get(0);
+        System.out.println("Replaced : " + data);
+        Assert.assertEquals(500, data.intValue());
+
+        expectUpdate = true;
+        testService.triggerListDataUpdate();
+
+        Assert.assertEquals(105, pagedList.size());
+        for (int i = 104; i >= 0; i--) {
+            data = pagedList.get(i);
+            System.out.println(data);
+            if (i == 0 || i == 50) {
+                Assert.assertEquals(500, data.intValue());
+            } else {
+                Assert.assertEquals(i, data.intValue());
+            }
+        }
+    }
+
 
     @Test
     public void testPagerIterate() {
@@ -133,6 +194,22 @@ public class PagerClientTest {
         int index = 0;
         for (TestData data : pagedList) {
             Assert.assertEquals(index, data.intData);
+            index++;
+        }
+
+        Assert.assertEquals(100, index);
+
+        Assert.assertNull(pagedList.getPagerNotifier());
+    }
+
+    @Test
+    public void testIntPagerIterate() {
+
+        Pager<Integer> pagedList = testService.getListDataPager();
+
+        int index = 0;
+        for (Integer data : pagedList) {
+            Assert.assertEquals(index, data.intValue());
             index++;
         }
 

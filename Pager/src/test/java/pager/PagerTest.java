@@ -25,7 +25,7 @@ public class PagerTest {
             }
 
             @Override
-            public int size() {
+            public int getDataSize() {
                 return 100;
             }
 
@@ -78,7 +78,7 @@ public class PagerTest {
             }
 
             @Override
-            public int size() {
+            public int getDataSize() {
                 return expectUpdate ? 105 : 100;
             }
 
@@ -172,7 +172,7 @@ public class PagerTest {
             }
 
             @Override
-            public int size() {
+            public int getDataSize() {
                 return 100;
             }
 
@@ -208,7 +208,7 @@ public class PagerTest {
             }
 
             @Override
-            public int size() {
+            public int getDataSize() {
                 return data.size();
             }
 
@@ -268,7 +268,7 @@ public class PagerTest {
             }
 
             @Override
-            public int size() {
+            public int getDataSize() {
                 return data.size();
             }
 

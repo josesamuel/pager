@@ -2,6 +2,9 @@ package pager.pagertestservice;
 
 import android.util.Log;
 
+import java.util.List;
+
+import pager.ListDataProvider;
 import pager.Pager;
 import pager.DataProvider;
 import pager.ITestService;
@@ -16,6 +19,8 @@ public class ServiceImpl implements ITestService {
     private boolean dataReplaced;
     private volatile boolean dataUpdated;
     private Pager<TestData> testDataPager;
+    private ListDataProvider<Integer> listDataProvider = new ListDataProvider<>();
+    private Pager<Integer> listDataPager = new Pager<>(listDataProvider);
 
 
     @Override
@@ -41,8 +46,8 @@ public class ServiceImpl implements ITestService {
             }
 
             @Override
-            public int size() {
-                Log.v(TAG, "get size " + dataUpdated);
+            public int getDataSize() {
+                Log.v(TAG, "get getDataSize " + dataUpdated);
                 return dataUpdated ? 105 : 100;
             }
 
@@ -91,5 +96,29 @@ public class ServiceImpl implements ITestService {
         dataUpdated = true;
         Log.v(TAG, "Notifying data set updated " + dataUpdated);
         testDataPager.getPagerNotifier().notifyDataSetChanged();
+    }
+
+    @Override
+    public Pager<Integer> getListDataPager() {
+        listDataProvider.clear();
+        for(int i=0; i<100; i++){
+            listDataProvider.add(i);
+        }
+        return listDataPager;
+    }
+
+    @Override
+    public void triggerListDataReplace() {
+        listDataProvider.set(50, 500);
+        listDataProvider.set(0, 500);
+    }
+
+    @Override
+    public void triggerListDataUpdate() {
+        listDataProvider.add(100);
+        listDataProvider.add(101);
+        listDataProvider.add(102);
+        listDataProvider.add(103);
+        listDataProvider.add(104);
     }
 }

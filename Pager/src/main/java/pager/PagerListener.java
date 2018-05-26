@@ -35,7 +35,7 @@ public interface PagerListener<T> {
 
 
     /**
-     * Called when the data set changed, like size changes
+     * Called when the data set changed, like getDataSize changes
      */
     void onDataSetChanged();
 }

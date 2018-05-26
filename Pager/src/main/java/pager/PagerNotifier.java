@@ -4,7 +4,7 @@ import remoter.annotations.ParamIn;
 import remoter.annotations.Remoter;
 
 /**
- * Use this to notify the {@link Pager} clients that a data is replaced or data size changed.
+ * Use this to notify the {@link Pager} clients that a data is replaced or data getDataSize changed.
  *
  * @see Pager#getPagerNotifier()
  */

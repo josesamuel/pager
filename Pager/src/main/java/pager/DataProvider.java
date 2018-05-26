@@ -9,6 +9,7 @@ import remoter.annotations.Remoter;
  * @param <T> Any primitive type, or Parcelable, or a class annotated as @Parcel
  * @see Pager
  * @see PagerNotifier
+ * @see ListDataProvider
  */
 @Remoter
 public interface DataProvider<T> {
@@ -19,9 +20,9 @@ public interface DataProvider<T> {
     T get(int position) throws IndexOutOfBoundsException;
 
     /**
-     * Returns the size of the data set
+     * Returns the getDataSize of the data set
      */
-    int size();
+    int getDataSize();
 
     /**
      * Close the provider and do any cleanup

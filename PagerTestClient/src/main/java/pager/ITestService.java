@@ -12,5 +12,11 @@ public interface ITestService {
 
     void triggerDataUpdate();
 
+    Pager<Integer> getListDataPager();
+
+    void triggerListDataReplace();
+
+    void triggerListDataUpdate();
+
 
 }

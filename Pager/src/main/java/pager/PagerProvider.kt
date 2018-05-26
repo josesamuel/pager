@@ -8,7 +8,7 @@ package pager
 internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : PagerListener<T> {
 
     var windowSize = 30
-    var dataSize = dataProvider.size()
+    var dataSize = dataProvider.getDataSize()
         private set
     private var pagedData = mutableListOf<T>()
     private var currentStart = -1
@@ -95,7 +95,7 @@ internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : Pag
 
     @Synchronized
     override fun onDataSetChanged() {
-        dataSize = dataProvider.size()
+        dataSize = dataProvider.getDataSize()
         currentStart = -1
         currentEnd = -1
         pagedData.clear()
@@ -103,7 +103,7 @@ internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : Pag
 
     @Synchronized
     override fun onDataAdded(newData: T, index: Int) {
-        dataSize = dataProvider.size()
+        dataSize = dataProvider.getDataSize()
         if (index < currentStart) {
             currentStart++
             currentEnd++
@@ -115,7 +115,7 @@ internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : Pag
 
     @Synchronized
     override fun onDataRemoved(index: Int) {
-        dataSize = dataProvider.size()
+        dataSize = dataProvider.getDataSize()
         if (index < currentStart) {
             currentStart--
             currentEnd--
