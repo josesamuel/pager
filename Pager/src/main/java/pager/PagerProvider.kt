@@ -1,5 +1,7 @@
 package pager
 
+import remoter.RemoterProxy
+
 /**
  * Provides paging to the data provided by DataProvider
  *
@@ -13,6 +15,7 @@ internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : Pag
     private var pagedData = mutableListOf<T>()
     private var currentStart = -1
     private var currentEnd = -1
+    private val remoteProvider = dataProvider is RemoterProxy
 
 
     /**
@@ -20,10 +23,12 @@ internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : Pag
      */
     @Throws(IndexOutOfBoundsException::class)
     @Synchronized
-    operator fun get(position: Int): T? {
-        fillIfNeeded(position)
-        return pagedData[position - currentStart]
-    }
+    operator fun get(position: Int) =
+            if (remoteProvider) {
+                fillIfNeeded(position)
+                pagedData[position - currentStart]
+            } else dataProvider[position]
+
 
     /**
      * Fill the window as needed
@@ -90,41 +95,49 @@ internal class PagerProvider<T>(private val dataProvider: DataProvider<T>) : Pag
     }
 
     override fun onDataReplaced(oldData: T, newData: T) {
-        pagedData.forEachIndexed { index, t -> if (t == oldData) pagedData[index] = newData }
+        if (remoteProvider) {
+            pagedData.forEachIndexed { index, t -> if (t == oldData) pagedData[index] = newData }
+        }
     }
 
     @Synchronized
     override fun onDataSetChanged() {
         dataSize = dataProvider.getDataSize()
-        currentStart = -1
-        currentEnd = -1
-        pagedData.clear()
+        if (remoteProvider) {
+            currentStart = -1
+            currentEnd = -1
+            pagedData.clear()
+        }
     }
 
     @Synchronized
     override fun onDataAdded(newData: T, index: Int) {
         dataSize = dataProvider.getDataSize()
-        if (index < currentStart) {
-            currentStart++
-            currentEnd++
-        } else if (index in currentStart..currentEnd) {
-            pagedData.add(index - currentStart, newData)
-            pagedData.removeAt(pagedData.size - 1)
+        if (remoteProvider) {
+            if (index < currentStart) {
+                currentStart++
+                currentEnd++
+            } else if (index in currentStart..currentEnd) {
+                pagedData.add(index - currentStart, newData)
+                pagedData.removeAt(pagedData.size - 1)
+            }
         }
     }
 
     @Synchronized
     override fun onDataRemoved(index: Int) {
         dataSize = dataProvider.getDataSize()
-        if (index < currentStart) {
-            currentStart--
-            currentEnd--
-        } else if (index in currentStart..currentEnd) {
-            pagedData.removeAt(index - currentStart)
-            currentEnd--
-            if (currentEnd < currentStart) {
-                currentStart = -1
-                currentEnd = -1
+        if (remoteProvider) {
+            if (index < currentStart) {
+                currentStart--
+                currentEnd--
+            } else if (index in currentStart..currentEnd) {
+                pagedData.removeAt(index - currentStart)
+                currentEnd--
+                if (currentEnd < currentStart) {
+                    currentStart = -1
+                    currentEnd = -1
+                }
             }
         }
     }

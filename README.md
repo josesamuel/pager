@@ -1,6 +1,8 @@
 # Pager
 
-Pager  - An alternative to Cursor, providing paged access to a collection of data, which can be shared across a process.
+Pager  - An alternative to Cursor, providing **paged access** to a collection of data, which can be shared across a process.
+
+Just like a Cursor, if Pager is shared across process through Binder (AIDL or [Remoter](http://j.mp/Remoter)), only a window of the original data is actually transferred acrossed the binder and rest is fetched as needed when they are accessed. 
 
 
 ## Why Pager
@@ -63,8 +65,7 @@ Gradle dependency
 
 ```groovy
 dependencies {
-	//Replace "api" with "compile" for pre AndroidStudio 3
-    api 'com.josesamuel:pager:1.0.3'
+    implementation 'com.josesamuel:pager:1.0.4'
 }
 ```
 

@@ -1,11 +1,20 @@
 package pager
 
-import java.util.function.Predicate
-
 /**
  * A [List] that implements [DataProvider]
  */
-class ListDataProvider<T> : ArrayList<T>(), DataProvider<T> {
+class ListDataProvider<T> : ArrayList<T>, DataProvider<T> {
+
+    /**
+     * Creates an empty [ListDataProvider]
+     */
+    constructor() : super()
+
+    /**
+     * Creates a [ListDataProvider] with the data from given [collection]
+     */
+    constructor(collection: Collection<T>) : super(collection)
+
 
     /**
      * The [PagerNotifier]. Set it from [Pager.getPagerNotifier]
